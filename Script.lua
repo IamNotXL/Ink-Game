@@ -8,7 +8,7 @@ local Window = Fluent:CreateWindow({
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
-    Theme = "Dark",
+    Theme = "Darker",
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
 
@@ -25,6 +25,11 @@ local Tabs = {
 local Options = Fluent.Options
 
 do
+
+    Tabs.Main:AddParagraph({
+        Title = "Hello, " .. game.Players.LocalPlayer.Name .. "!"
+    })
+    
     Tabs.Main:AddButton({
         Title = "Button",
         Description = "Very important button",
@@ -33,6 +38,16 @@ do
         end
     })
 
+-------------------------------
+
+    Tabs.Player:AddButton({
+        Title = "Button",
+        Description = "Very important button",
+        Callback = function()
+            print("Button clicked.")
+        end
+    })
+    
 -------------------------------
     
     Tabs.Lobby:AddButton({
@@ -49,7 +64,18 @@ do
 -------------------------------
 
     Tabs.RLGL:AddButton({
-        Title = "Finish",
+        Title = "Tp To Start Line",
+        Callback = function()
+        	local humanoidrootpart = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        	if humanoidrootpart then
+        		humanoidrootpart.CFrame = CFrame.new(game.Workspace.RedLightGreenLight.sand.startingcrossedover.CFrame.p) + Vector3.new(0,5,0)
+        	end
+
+        end
+    })
+
+    Tabs.RLGL:AddButton({
+        Title = "Tp To Finish Line",
         Callback = function()
         	local humanoidrootpart = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
         	if humanoidrootpart then
