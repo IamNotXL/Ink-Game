@@ -29,6 +29,12 @@ do
     Tabs.Main:AddParagraph({
         Title = "Hello, " .. game.Players.LocalPlayer.Name .. "!"
     })
+
+    local executor = detectExecutor()
+    
+    Tabs.Main:AddParagraph({
+        Title = string.format("Executor: `%s`", executor)
+    })
     
     Tabs.Main:AddButton({
         Title = "Button",
