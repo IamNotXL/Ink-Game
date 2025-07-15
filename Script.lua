@@ -6,7 +6,7 @@ local Window = Fluent:CreateWindow({
     Title = "🦑 Ink Game",
     SubTitle = "",
     TabWidth = 160,
-    Size = UDim2.fromOffset(580, 460),
+    Size = UDim2.fromOffset(500, 430),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
     Theme = "Darker",
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
@@ -17,7 +17,7 @@ local Tabs = {
     Player = Window:AddTab({ Title = "Player"}),
     Lobby = Window:AddTab({ Title = "Lobby"}),
     RLGL = Window:AddTab({ Title = "Red Light Green Light"}),
-    Main1 = Window:AddTab({ Title = "Main"}),
+    Rebel = Window:AddTab({ Title = "Rebel"}),
     Main2 = Window:AddTab({ Title = "Main"}),
     Main3 = Window:AddTab({ Title = "Main"}),
 }
@@ -90,6 +90,23 @@ do
         Finished = true, -- Only calls callback when you press enter
         Callback = function(Value)
             game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+        end
+    })
+
+    local Input = Tabs.Player:AddInput("Input", {
+        Title = "Walk Speed V2",
+        Description = "Default = 1",
+        Placeholder = "Value",
+        Numeric = true, -- Only allows numbers
+        Finished = true, -- Only calls callback when you press enter
+        Callback = function(Value)
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+
+            local ssfold = character:FindFirstChild("SwingSpeed")
+            if ssfold then
+                ssfold.Value = Value
+            end
         end
     })
 
@@ -212,12 +229,36 @@ LocalPlayer.CharacterAdded:Connect(setup)
 
         end
     })
+
+    Tabs.RLGL:AddButton({
+        Title = "Remove Injury",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+
+            local stuntFold = character:FindFirstChild("Stun")
+            if stuntFold then
+                stuntFold:Destroy()
+            end
+        end
+    })
     
 end
 
+-------------------------------
 
-
-
+    Tabs.Rebel:AddButton({
+        Title = "Guard Hitbox",
+        Callback = function()
+            for _, guard in pairs(Workspace.Live:GetChildren()) do
+                if guard.Name == "squid guylobby" and guard:FindFirstChild("Head") then
+                    guard.Head.Size = Vector3.new(10, 9, 9)
+                    local highlight = Instance.new("Highlight")
+                    highlight.Parent = guard.Head
+                end
+            end
+        end
+    })
 
 
 
