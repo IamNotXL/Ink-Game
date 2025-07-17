@@ -120,6 +120,36 @@ do
         end
     })
 
+    local Input = Tabs.Player:AddInput("Input", {
+        Title = "XP Level (Non-FE)",
+        Placeholder = "Value",
+        Numeric = true, -- Only allows numbers
+        Finished = true, -- Only calls callback when you press enter
+        Callback = function(Value)
+            game.Players.LocalPlayer:SetAttribute("_CurrentLevel", Value)
+        end
+    })
+
+    local Input = Tabs.Player:AddInput("Input", {
+        Title = "Current XP (Non-FE)",
+        Placeholder = "Value",
+        Numeric = true, -- Only allows numbers
+        Finished = true, -- Only calls callback when you press enter
+        Callback = function(Value)
+            game.Players.LocalPlayer:SetAttribute("_Experience", Value)
+        end
+    })
+
+    local Input = Tabs.Player:AddInput("Input", {
+        Title = "Wins (Non-FE)",
+        Placeholder = "Value",
+        Numeric = true, -- Only allows numbers
+        Finished = true, -- Only calls callback when you press enter
+        Callback = function(Value)
+            game.Players.LocalPlayer:SetAttribute("_GameWins", Value)
+        end
+    })
+    
     local Toggle = Tabs.Player:AddToggle("MyToggle", {Title = "Auto Run", Default = false })
 
     Toggle:OnChanged(function(v)
@@ -192,6 +222,330 @@ end
 
 LocalPlayer.CharacterAdded:Connect(setup)
     end)
+
+    Tabs.Player:AddButton({
+        Title = "Teleport To Random Player",
+        Callback = function()
+            local players = game:GetService("Players")
+            local localPlayer = players.LocalPlayer
+            -- Get all players except the local player
+            local otherPlayers = {}
+            for _, player in pairs(players:GetPlayers()) do
+                if player ~= localPlayer then
+                    table.insert(otherPlayers, player)
+                end
+            end
+
+            -- Check if there are any other players to teleport to
+            if #otherPlayers > 0 then
+                -- Choose a random player from the list
+                local targetPlayer = otherPlayers[math.random(1, #otherPlayers)]
+
+                -- Teleport the local player to the target player's position
+                if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
+                    if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                            localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+                    end
+                end
+            else
+                -- No other players available
+                print("No other players to teleport to.")
+            end
+        end
+    })
+
+    local Dropdown = Tabs.Player:AddDropdown("TitleDropdown", {
+        Title = "Select Title",
+        Values = {"None", "Squidder", "Frontman", "Him", "Rich Millionaire", "The Chosen One", "The Glass Maker", "Tanos", "Manipulator", "Honeycomb Artist", "The Recruiter", "Game VIP", "Game Developer", "Game Moderator", "Game Contributor", "Game Builder", "Game Animator", "Game Artist", "Game Modeller", "Sackboy", "Content Creator", "SFX Designer", "The Perfect Lifeform", "The Strongest"},
+        Multi = false,
+        Default = 1,
+    })
+
+    Tabs.Player:AddButton({
+        Title = "Enable Selected Title",
+        Callback = function()
+        	Dropdown:OnChanged(function(Value)
+                if Dropdown.Value == "Squidder" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Squidder]"
+                        title.TextColor3 = Color3.fromRGB(255, 116, 116)
+                    end
+                elseif Dropdown.Value == "Frontman" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Fontman]"
+                        title.TextColor3 = Color3.fromRGB(22, 22, 22)
+                    end
+                elseif Dropdown.Value == "Him" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Him]"
+                        title.TextColor3 = Color3.fromRGB(0, 0, 0)
+                    end
+                elseif Dropdown.Value == "Rich Millionaire" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+                    
+                    local title = character.Torso.Player_Nametag.TitleText
+                    local gradient = Instance.new("UIGradient")
+                    gradient.Parent = title
+                    if title then
+                        title.Text = "[Rich Millionaire]"
+                        title.TextColor3 = Color3.fromRGB(226, 184, 58)
+                        gradient.Color = "0 1 1 0.745098 0 0.3 1 1 0 0 0.6 1 1 0.588235 0 1 1 0.862745 0 0"
+                        gradient.Rotation = 45
+                    end
+                elseif Dropdown.Value == "The Chosen One" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[The Chosen One]"
+                        title.TextColor3 = Color3.fromRGB(136, 4, 4)
+                    end
+                elseif Dropdown.Value == "The Glass Maker" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[The Glass Maker]"
+                        title.TextColor3 = Color3.fromRGB(0, 79, 238)
+                    end
+                elseif Dropdown.Value == "Tanos" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Tanos]"
+                        title.TextColor3 = Color3.fromRGB(85, 0, 127)
+                    end
+                elseif Dropdown.Value == "Manipulator" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Manipulator]"
+                        title.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    end
+                elseif Dropdown.Value == "Honeycomb Artist" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Honeycomb Artist]"
+                        title.TextColor3 = Color3.fromRGB(204, 153, 0)
+                    end
+                elseif Dropdown.Value == "The Recruiter" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[The Recruiter]"
+                        title.TextColor3 = Color3.fromRGB(80, 80, 80)
+                    end
+                elseif Dropdown.Value == "Game VIP" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Game VIP]"
+                        title.TextColor3 = Color3.fromRGB(120, 0, 180)
+                    end
+                elseif Dropdown.Value == "Game Developer" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Game Developer]"
+                        title.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    end
+                elseif Dropdown.Value == "Game Moderator" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Game Moderator]"
+                        title.TextColor3 = Color3.fromRGB(82, 171, 255)
+                    end
+                elseif Dropdown.Value == "Game Contributor" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Game Contributor]"
+                        title.TextColor3 = Color3.fromRGB(255, 169, 82)
+                    end
+                elseif Dropdown.Value == "Game Builder" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Game Builder]"
+                        title.TextColor3 = Color3.fromRGB(255, 116, 116)
+                    end
+                elseif Dropdown.Value == "Game Animator" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Game Animator]"
+                        title.TextColor3 = Color3.fromRGB(46, 255, 105)
+                    end
+                elseif Dropdown.Value == "Game Artist" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Game Artist]"
+                        title.TextColor3 = Color3.fromRGB(32, 255, 125)
+                    end
+                elseif Dropdown.Value == "Game Modeller" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Game Modeller]"
+                        title.TextColor3 = Color3.fromRGB(255, 171, 102)
+                    end
+                elseif Dropdown.Value == "Sackboy" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Sackboy]"
+                        title.TextColor3 = Color3.fromRGB(121, 80, 1)
+                    end
+                elseif Dropdown.Value == "Content Creator" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[Content Creator]"
+                        title.TextColor3 = Color3.fromRGB(255, 61, 61)
+                    end
+                elseif Dropdown.Value == "SFX Designer" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[SFX Designer]"
+                        title.TextColor3 = Color3.fromRGB(255, 140, 51)
+                    end
+                elseif Dropdown.Value == "The Perfect Lifeform" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[The Perfect Lifeform]"
+                        title.TextColor3 = Color3.fromRGB(41, 255, 59)
+                    end
+                elseif Dropdown.Value == "The Strongest" then
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    local title = character.Torso.Player_Nametag.TitleText
+                    if title then
+                        title.Text = "[The Strongest]"
+                        title.TextColor3 = Color3.fromRGB(161, 242, 255)
+                    end
+
+                end
+            end)
+        end
+    })
+
+    Tabs.Player:AddButton({
+        Title = "Disable Title",
+        Callback = function()
+        	Dropdown:OnChanged(function(Value)
+                local player = game.Players.LocalPlayer
+                local character = player.Character or player.CharacterAdded:Wait()
+
+                local title = character.Torso.Player_Nametag.TitleText
+                if title then
+                    title.Text = ""
+                    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+                end
+            end)
+        end
+    })
+
+    local anima = game:GetService("ReplicatedStorage").Animations.Emotes
+    local emoteNames = {"None"} -- Optional default choice
+    for _, emote in ipairs(anima:GetChildren()) do
+        if emote:IsA("Animation") then
+            table.insert(emoteNames, emote.Name)
+        end
+    end
+    
+    local DropdownEmote = Tabs.Player:AddDropdown("EmoteDropdown", {
+        Title = "Select Emote",
+        Values = emoteNames,
+        Multi = false,
+        Default = 1,
+    })
+
+    Tabs.Player:AddButton({
+        Title = "Play Selected Emote",
+        Callback = function()
+        	local selected = DropdownEmote.Value
+            if selected and selected ~= "None" then
+                local player = game.Players.LocalPlayer
+                local character = player.Character or player.CharacterAdded:Wait()
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+                local anim = anima:FindFirstChild(selected)
+                if anim and humanoid then
+                    local animTrack = humanoid:LoadAnimation(anim)
+                    animTrack:Play()
+                else
+                    warn("Animation or humanoid not found!")
+                end
+            end
+        end
+    })
+
+        Tabs.Player:AddButton({
+        Title = "Stop Playing Emote",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character.Humanoid
+
+            for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+                track:Stop()
+            end
+        end
+    })
     
 -------------------------------
     
@@ -251,7 +605,7 @@ end
         Title = "Guard Hitbox",
         Callback = function()
             for _, guard in pairs(Workspace.Live:GetChildren()) do
-                if guard.Name == "squid guylobby" and guard:FindFirstChild("Head") then
+                if guard.Name == "squid guylobby" and guard.Name == "triangle lobby guard can agro" and guard.Name == "dalgona circle guard" and guard.Name == "a" and guard:FindFirstChild("Head") then
                     guard.Head.Size = Vector3.new(10, 9, 9)
                     local highlight = Instance.new("Highlight")
                     highlight.Parent = guard.Head
@@ -260,6 +614,34 @@ end
         end
     })
 
+    Tabs.Rebel:AddButton({
+        Title = "Bring Guards",
+        Callback = function()
+            local RunService = game:GetService("RunService")
+            local Players = game:GetService("Players")
+            local player = Players.LocalPlayer
+
+            local character = player.Character or player.CharacterAdded:Wait()
+            local root = character:WaitForChild("HumanoidRootPart")
+
+            -- Table of parts and their offset positions (in front of the player)
+            local followParts = {
+                {
+                    part = workspace.Live:WaitForChild("squid guylobby"),
+                    offset = Vector3.new(0, 0, -10) -- Farther ahead
+                },
+            }
+
+                -- Set basic part properties
+
+                RunService.RenderStepped:Connect(function()
+                for _, info in ipairs(followParts) do
+                    local offsetCFrame = root.CFrame:ToWorldSpace(CFrame.new(info.offset))
+                    info.part.Postion = offsetCFrame
+                end
+            end)
+        end
+    })
 
 
 
