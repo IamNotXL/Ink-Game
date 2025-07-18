@@ -13,13 +13,15 @@ local Window = Fluent:CreateWindow({
 })
 
 local Tabs = {
-    Main = Window:AddTab({ Title = "Main"}),
-    Player = Window:AddTab({ Title = "Player"}),
-    Lobby = Window:AddTab({ Title = "Lobby"}),
-    RLGL = Window:AddTab({ Title = "Red Light Green Light"}),
-    Rebel = Window:AddTab({ Title = "Rebel"}),
-    Main2 = Window:AddTab({ Title = "Main"}),
-    Main3 = Window:AddTab({ Title = "Main"}),
+    Main = Window:AddTab({ Title = "Main", Icon = "home"}),
+    Player = Window:AddTab({ Title = "Player", Icon = "users"}),
+    Lobby = Window:AddTab({ Title = "Lobby", Icon = "building"}),
+    RLGL = Window:AddTab({ Title = "Red Light Green Light", Icon = "siren"}),
+    LightsOut = Window:AddTab({ Title = "Lights Out", Icon = "lightbulb-off"}),
+    GlassBridge = Window:AddTab({ Title = "Glass Bridge", Icon = "grid"}),
+    Rebel = Window:AddTab({ Title = "Rebel", Icon = "axe"}),
+    Misc = Window:AddTab({ Title = "Misc", Icon = "align-justify"}),
+    MoreScripts = Window:AddTab({ Title = "MoreScripts", Icon = "app-window-mac"}),
 }
 
 local Options = Fluent.Options
@@ -596,54 +598,230 @@ LocalPlayer.CharacterAdded:Connect(setup)
             end
         end
     })
-    
-end
 
 -------------------------------
 
+    Tabs.LightsOut:AddButton({
+        Title = "Tp To Safe Place",
+        Callback = function()
+            local humanoidrootpart = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        	if humanoidrootpart then
+        		humanoidrootpart.CFrame = CFrame.new(workspace.Map:GetChildren()[38]:GetChildren()[67].CFrame.p) + Vector3.new(0,5,0)
+        	end
+        end
+    })
+
+    Tabs.LightsOut:AddButton({
+        Title = "Tp All Players To Me",
+        Callback = function()
+            local localPlayer = game.Players.LocalPlayer
+        	local char = localPlayer.Character
+        	if not char then return end
+
+            	local root = char:FindFirstChild("HumanoidRootPart")
+                	if not root then return end
+
+                    	for _, player in pairs(game.Players:GetPlayers()) do
+                    		if player ~= localPlayer then
+                    			local otherChar = player.Character
+                    			if otherChar and otherChar:FindFirstChild("HumanoidRootPart") then
+                    				-- WARNING: this will only move the character visually for the local player
+                    				otherChar:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame.p) + game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame.LookVector * 20
+                    			end
+                    		end
+                    	end
+        end
+    })
+
+    local Toggle = Tabs.Main:AddToggle("MyToggle", {Title = "Kill Aura", Default = false })
+    
+    Toggle:OnChanged(function(v)
+        killAuraEnabled = v
+    end)
+    
+-------------------------------
+
+    Tabs.GlassBridge:AddButton({
+        Title = "Tp To Start Platform",
+        Callback = function()
+            local humanoidrootpart = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        	if humanoidrootpart then
+        		humanoidrootpart.CFrame = CFrame.new(workspace.GlassBridge["Plane.012"].CFrame.p) + Vector3.new(0,5,0)
+        	end
+        end
+    })
+
+    Tabs.GlassBridge:AddButton({
+        Title = "Tp To End Platform",
+        Callback = function()
+            local humanoidrootpart = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        	if humanoidrootpart then
+        		humanoidrootpart.CFrame = CFrame.new(workspace.GlassBridge.End.Model["Plane.012"].CFrame.p) + Vector3.new(0,5,0)
+        	end
+        end
+    })
+    
+------------------------------- 
+
+    local Toggle = Tabs.Rebel:AddToggle("HitboxToggle", {Title = "Guards Hitbox", Default = false })
+
+    Toggle:OnChanged(function(v)
+        if v then
+            for _, guard in pairs(Workspace.Live:GetChildren()) do
+                if guard.Name == "squid guylobby" and guard:FindFirstChild("Head") then
+                    guard.Head.Size = Vector3.new(10, 9, 9)
+                end
+            end
+        else
+            for _, guard in pairs(Workspace.Live:GetChildren()) do
+                if guard.Name == "squid guylobby" and guard:FindFirstChild("Head") then
+                    guard.Head.Size = Vector3.new(2, 1, 1)
+                end
+            end
+        end
+    end)
+
+    local Toggle = Tabs.Rebel:AddToggle("EspToggle", {Title = "ESP Guards", Default = false })
+    
+    Toggle:OnChanged(function(v)
+        local highlight = Instance.new("Highlight")
+        if v then
+            for _, guard in pairs(Workspace.Live:GetChildren()) do
+                if guard.Name == "squid guylobby" and guard:FindFirstChild("Head") then
+                    highlight.Parent = guard.Head
+                end
+            end
+        else
+            for _, guard in pairs(Workspace.Live:GetChildren()) do
+                if guard.Name == "squid guylobby" and guard:FindFirstChild("Head") then
+                    for _, hl in ipairs(guard.Head:GetChildren()) do
+                        if hl:IsA("Highlight") then
+                            hl:Destroy()
+                        end
+                    end
+                end
+            end
+        end
+    end)
+
     Tabs.Rebel:AddButton({
-        Title = "Guard Hitbox",
+        Title = "Bring Guards (W.I.P)",
         Callback = function()
             for _, guard in pairs(Workspace.Live:GetChildren()) do
-                if guard.Name == "squid guylobby" and guard.Name == "triangle lobby guard can agro" and guard.Name == "dalgona circle guard" and guard.Name == "a" and guard:FindFirstChild("Head") then
-                    guard.Head.Size = Vector3.new(10, 9, 9)
-                    local highlight = Instance.new("Highlight")
-                    highlight.Parent = guard.Head
+                if guard.Name == "squid guylobby" and guard:FindFirstChild("HumanoidRootPart") then
+                    if guard then
+                        while true do
+                            guard:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame.p) + game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame.LookVector * 20
+                            task.wait(0.01)
+                        end
+                    end
                 end
             end
         end
     })
 
-    Tabs.Rebel:AddButton({
-        Title = "Bring Guards",
+-------------------------------
+
+    Tabs.Misc:AddButton({
+        Title = "Infinite Yield",
         Callback = function()
-            local RunService = game:GetService("RunService")
-            local Players = game:GetService("Players")
-            local player = Players.LocalPlayer
-
-            local character = player.Character or player.CharacterAdded:Wait()
-            local root = character:WaitForChild("HumanoidRootPart")
-
-            -- Table of parts and their offset positions (in front of the player)
-            local followParts = {
-                {
-                    part = workspace.Live:WaitForChild("squid guylobby"),
-                    offset = Vector3.new(0, 0, -10) -- Farther ahead
-                },
-            }
-
-                -- Set basic part properties
-
-                RunService.RenderStepped:Connect(function()
-                for _, info in ipairs(followParts) do
-                    local offsetCFrame = root.CFrame:ToWorldSpace(CFrame.new(info.offset))
-                    info.part.Postion = offsetCFrame
-                end
-            end)
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
         end
     })
 
+    local Toggle = Tabs.Misc:AddToggle("MyToggle", {Title = "Mute Emote Volume", Default = false })
 
+    Toggle:OnChanged(function(v)
+        local em = game:GetService("SoundService").EmoteMusic
+            
+        if v then
+            em.Volume = 0
+        else
+            em.Volume = 1
+        end
+    end)
+
+    local Toggle = Tabs.Misc:AddToggle("MyToggle", {Title = "Mute Global Volume", Default = false })
+
+    Toggle:OnChanged(function(v)
+        local em = game:GetService("SoundService").GlobalMusic
+            
+        if v then
+            em.Volume = 0
+        else
+            em.Volume = 1
+        end
+    end)
+
+    local Toggle = Tabs.Misc:AddToggle("MyToggle", {Title = "Mute Volume Control", Default = false })
+
+    Toggle:OnChanged(function(v)
+        local em = game:GetService("SoundService").VolumeControl
+            
+        if v then
+            em.Volume = 0
+        else
+            em.Volume = 1
+        end
+    end)
+
+-------------------------------
+    
+    Tabs.MoreScripts:AddParagraph({
+        Title = "The scripts here are from other users, you can directly execute it."
+    })
+
+    Tabs.MoreScripts:AddButton({
+        Title = "RINGTA Hub (by Ringta)",
+        Callback = function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/wefwef127382/inkgames.github.io/refs/heads/main/ringta.lua"))()
+        end
+    })
+
+    Tabs.MoreScripts:AddButton({
+        Title = "Ink Game (By Tora IsMe",
+        Callback = function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/InkGame"))()
+        end
+    })
+
+    Tabs.MoreScripts:AddButton({
+        Title = "AX-SCRIPTS (by AlexScriptX",
+        Callback = function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/AlexScriptX/Ink-Game-Script/refs/heads/main/Ink%20Game%20by%20AlexScriptX.lua"))()
+        end
+    })
+
+    Tabs.MoreScripts:AddButton({
+        Title = "",
+        Callback = function()
+            
+        end
+    })
+
+    Tabs.MoreScripts:AddButton({
+        Title = "",
+        Callback = function()
+            
+        end
+    })
+
+    Tabs.MoreScripts:AddButton({
+        Title = "",
+        Callback = function()
+            
+        end
+    })
+
+    Tabs.MoreScripts:AddButton({
+        Title = "",
+        Callback = function()
+            
+        end
+    })
+
+    
+end
 
 
 
