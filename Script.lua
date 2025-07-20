@@ -18,6 +18,7 @@ local Tabs = {
     Lobby = Window:AddTab({ Title = "Lobby", Icon = "building"}),
     RLGL = Window:AddTab({ Title = "Red Light Green Light", Icon = "siren"}),
     LightsOut = Window:AddTab({ Title = "Lights Out", Icon = "lightbulb-off"}),
+    JumpRope = Window:AddTab({ Title = "Jump Rope", Icon = "target"}),
     GlassBridge = Window:AddTab({ Title = "Glass Bridge", Icon = "grid"}),
     Rebel = Window:AddTab({ Title = "Rebel", Icon = "axe"}),
     Misc = Window:AddTab({ Title = "Misc", Icon = "align-justify"}),
@@ -641,6 +642,28 @@ LocalPlayer.CharacterAdded:Connect(setup)
     
 -------------------------------
 
+    Tabs.JumpRope:AddButton({
+        Title = "Tp To Start Platform",
+        Callback = function()
+            local humanoidrootpart = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        	if humanoidrootpart then
+        		humanoidrootpart.CFrame = CFrame.new(workspace.JumpRope.Model_3.Model_624.Model_625.Model_631.Union.CFrame.p) + Vector3.new(0,5,0)
+        	end
+        end
+    })
+
+        Tabs.JumpRope:AddButton({
+        Title = "Tp To End Platform",
+        Callback = function()
+            local humanoidrootpart = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        	if humanoidrootpart then
+        		humanoidrootpart.CFrame = CFrame.new(workspace.JumpRope.Model_3.Model_96.Model_97.Model_103.Union.CFrame.p) + Vector3.new(0,5,0)
+        	end
+        end
+    })
+
+-------------------------------
+
     Tabs.GlassBridge:AddButton({
         Title = "Tp To Start Platform",
         Callback = function()
@@ -764,6 +787,19 @@ LocalPlayer.CharacterAdded:Connect(setup)
             em.Volume = 1
         end
     end)
+
+    Tabs.Misc:AddButton({
+        Title = "Low GFX",
+        Callback = function()
+            local Material = "SmoothPlastic"
+
+            for i,v in next, game:GetService("Workspace"):GetDescendants() do
+                if v:IsA("BasePart") then
+                    v.Material = Material
+                end
+            end
+        end
+    })
 
 -------------------------------
     
